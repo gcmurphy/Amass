@@ -232,13 +232,17 @@ func Crawl(ctx context.Context, u string, scope []string, max int, f filter.Filt
 
 			r.HTMLDoc.Find("a").Each(func(i int, s *goquery.Selection) {
 				if href, ok := s.Attr("href"); ok {
-					processURL(r.JoinURL(href))
+					if url, e := r.JoinURL(href); e == nil {
+						processURL(url.String())
+					}
 				}
 			})
 
 			r.HTMLDoc.Find("script").Each(func(i int, s *goquery.Selection) {
 				if src, ok := s.Attr("src"); ok {
-					processURL(r.JoinURL(src))
+					if url, e := r.JoinURL(src); e == nil {
+						processURL(url.String())
+					}
 				}
 			})
 		},
